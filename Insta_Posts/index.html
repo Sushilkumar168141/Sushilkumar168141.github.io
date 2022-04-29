@@ -1,1 +1,24 @@
-Hello World
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <?php
+    
+        include "Variables.php";
+
+        if(isset($_POST['loginButton'])) {
+            echo "Button clicked<br/>";
+            $url = $AUTHORIZATION_URL."client_id=".$CLIENT_ID."&redirect_uri=".$REDIRECT_URI."&scope=".$SCOPE."&response_type=".$RESPONSE_TYPE;
+            echo $url;
+            header('Location: '.$url);
+        }
+    
+        ?>
+
+        <form method="post">
+            <input type="submit" name="loginButton" value="Login with Instagram" />
+        </form>
+    </body>
+</html>

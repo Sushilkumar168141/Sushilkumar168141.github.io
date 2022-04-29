@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <p>
+            <!--You have succesfully logged  in  with Instagram.-->
+            <br />
+            <?php
+
+            include "../Variables.php";
+
+            $CODE = $_GET['code'];
+            //echo "Your code is : <br /><br />".$CODE;
+
+
+            // Curl the url to get access token and user id from Instagram
+
+            $url = $IG_ACCESS_TOKEN_URL;
+
+            //The data you want to send via POST
+            $fields = [
+            'client_id'       => $CLIENT_ID,
+            'client_secret'   => $CLIENT_SECRET,
+            'grant_type'      => $GRANT_TYPE,
+            'redirect_uri'    => $REDIRECT_URI,
+            'code'            => $CODE
+            ];
+
+            //url-ify the data for the POST
+            $fields_string = http_build_query($fields);
+
+            //open connection
+            $ch = curl_init();
+
+            //set the url, number of POST vars, POST data
+            curl_setopt($ch,CURLOPT_URL, $url);
+            curl_setopt($ch,CURLOPT_POST, true);
+            curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
+
+            //So that curl_exec returns the contents of the cURL; rather than echoing it
+            curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
+
+            //execute post
+            $result = curl_exec($ch);
+            curl_close($ch);
+            //echo $result;
+
+            $decoded_result = json_decode($result, true);
+            //echo $decoded_result["access_token"];
+            //echo $decoded_result["user_id"];
+            $ACCESS_TOKEN = $decoded_result["access_token"];
+            $USER_ID = $decoded_result["user_id"];
+
+            //echo $ACCESS_TOKEN."<br />";
+            //echo $USER_ID."<br />";
+
+            // Curl to get the username from the Instagram
+            $url = $IG_QUERY_URL.$USER_ID."?fields=id,username,account_type,media_count&access_token=".$ACCESS_TOKEN;
+            //echo "URL : ".$url."<br />";
+            $ch = curl_init();
+            curl_setopt($ch,CURLOPT_URL, $url);
+            curl_setopt($ch,CURLOPT_HTTPGET, true);
+            curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            //echo $result;
+
+            $decoded_result = json_decode($result, true);
+            //echo $decoded_result["access_token"];
+            //echo $decoded_result["user_id"];
+            $ID = $decoded_result["id"];
+            $USERNAME = $decoded_result["username"];
+            $ACCOUNT_TYPE = $decoded_result["account_type"];
+            $MEDIA_COUNT = $decoded_result["media_count"];
+
+            echo "Your ID is : ".$ID."<br />";
+            echo "Your username is : ".$USERNAME."<br />";
+            echo "Your account type is : ".$ACCOUNT_TYPE."<br />";
+            echo "Your media count is : ".$MEDIA_COUNT."<br />";
+            ?>
+        </p>
+    </body>
+</html>
