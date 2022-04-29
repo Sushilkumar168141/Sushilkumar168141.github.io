@@ -1,7 +1,7 @@
 <?php
 
-//$BASE_URL = "https://sushilkumar168141.github.io/Insta_Posts/";
-$BASE_URL = "https://localhost/Insta_Posts/";
+$BASE_URL = "https://sushilkumar168141.github.io/Insta_Posts/";
+//$BASE_URL = "https://localhost/Insta_Posts/";
 $CLIENT_ID = "572404311158465";
 $SCOPE="user_profile,user_media";
 //$SCOPE = "instagram_graph_user_media, instagram_graph_user_profile";
